@@ -53,6 +53,7 @@ import emojifs.slack
 from emojifs.muxer import Muxer
 from emojifs.slack import Slack
 from emojifs.discord import Discord
+from emojifs.mattermost import Mattermost
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter,
                       argparse.RawDescriptionHelpFormatter):
@@ -154,6 +155,17 @@ def main():
                 logger.error("Not mounting /discord as you didn't acknowledge the risk.")
             else:
                 muxer_map['/discord'] = Discord(token)
+
+    for instance_name, instance_config in config.get('mattermost', {}).items():
+        fuse_path = f'/mattermost/{instance_name}'
+        base_url = instance_config.get('base_url')
+        if not base_url:
+            logger.error("Can't mount %s without a 'base_url' configured.", fuse_path)
+            continue
+        if 'token' in instance_config:
+            muxer_map[fuse_path] = Mattermost(base_url, token=instance_config['token'])
+        else:
+            logger.error("Can't mount %s without configureing a 'token' value.", fuse_path)
 
     if not muxer_map:
         logger.warn("We didn't discover any Slacks or Discords to use. "

@@ -25,8 +25,11 @@ def getgid():
 
 
 @cachetools.cached(cachetools.LRUCache(maxsize=200))
-def get_emoji_bytes(url: str) -> bytes:
+def get_emoji_bytes(url: str, session=None) -> bytes:
     """Returns the bytes for a given emoji URL.  Handles HTTP(S) and data URLs."""
+    if not session:
+        session = _session  # fall back to module-internal session.
+
     if url.startswith('http'):
         r = _session.get(url)
         r.raise_for_status()

@@ -52,6 +52,11 @@ For Slack, the easiest thing to do is:
 * Find a request going towards edgeapi.slack.com or api.slack.com or a URL path starting with /api.  In Chrome, you can just type `api` in the Filter box above the timeline.
 * Extract the cookie header value from your request, and use it in the config file below.
 
+### Mattermost
+* In your web browser, log in to Mattermost.
+* Create a "Personal Access Token" from the `Account Settings > Security` menu.
+* You need the Access Token, *not* the Token ID.
+
 ### Discord
 * In your web browser, go to https://discord.com/app
 * Open your browser devtools network panel
@@ -132,6 +137,10 @@ cookies = [
 
 [slack.renames]
 thisisaverylongname = 'short'
+
+[mattermost.instance_name]
+base_url = 'https://chat.company.com/'
+token = '1w2Bo...'
 
 ```
 
